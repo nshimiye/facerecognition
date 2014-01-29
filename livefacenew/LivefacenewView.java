@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -57,7 +58,7 @@ public class LivefacenewView extends FrameView implements MouseListener {
     private boolean userav = false;
     private Point tlc, brc;
     private String temp;
-
+int iii=1;
     public LivefacenewView(SingleFrameApplication app) {
         super(app);
 
@@ -111,7 +112,7 @@ public class LivefacenewView extends FrameView implements MouseListener {
         System.load(temp + "\\facesdk.dll");
 
         try {
-            int r = FSDK.ActivateLibrary("hEnFaGH0pxK3MjHQ97QM94lhHWQtKXWxZrUBRgHeBwyf0F1EYZZxtFyTfPT6ao9YSXeJtn6QyfdMgIMI6B59/+aS4ubj8ktKgsHjL4ZUXqGq8kNsMCv+zwWJv55MFvovxjTFKdyLXn3ZKIdmEc6W3vNCws4xjsFuTzFTrpAXYTI=");
+            int r = FSDK.ActivateLibrary("jWPh3GSfwLGCzaiZTcDNCjtsfAU1ChpyvAWdCc8M754HRYu1g3RRpTBU4l9YFOI8kghhl27TKSyLvh62yn6hiWHpNu5sLgcy7kSsexG2fse3GYC6P5nq3eDczIR534AfAygNMhXN2QqcP0uY81PiY3Rh0rfVQ4Xl+Bl9ElUmZKE=");
             if (r != FSDK.FSDKE_OK) {
                 JOptionPane.showMessageDialog(camPanel, "Please run the License Key Wizard (Start - Luxand - FaceSDK - License Key Wizard)", "Error activating FaceSDK", JOptionPane.ERROR_MESSAGE);
                 System.exit(r);
@@ -411,6 +412,16 @@ public class LivefacenewView extends FrameView implements MouseListener {
 
                         // display current frame
                         mainFrame.getGraphics().drawImage((bufImage != null) ? bufImage : awtImage[0], 0, 0, null);
+                        
+                        if(iii == 1 && (bufImage != null)){
+                            iii = 0;
+                        try {
+                            BufferedImage bi = bufImage;
+                            File outputfile = new File(temp + "\\saved.png");
+                            ImageIO.write(bi, "png", outputfile);
+                        } catch (IOException ex) {
+                            ex.toString();
+                        }}
                         if (prof1 != null && bufImg != null) {
                             //Toolkit.getDefaultToolkit().createImage(prof);
                             //prof_pic.getGraphics().drawImage((bufImg != null) ? bufImg : prof1,
@@ -576,9 +587,9 @@ public class LivefacenewView extends FrameView implements MouseListener {
         Connection conn = null;
 
         try {
-            String userName = "marcen0";
+            String userName = "mars";
             String password = "From2to1";
-            String url = "jdbc:mysql://198.101.215.122:3306/facerec";
+            String url = "jdbc:mysql://nextic.myvnc.com:3306/facerec";
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(url, userName, password);
             System.out.println("Database connection established");

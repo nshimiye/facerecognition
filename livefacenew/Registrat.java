@@ -221,9 +221,9 @@ public class Registrat extends javax.swing.JDialog {
             Connection conn = null;
 
             try {
-                String userName = "marcen0";
+                String userName = "mars";
                 String password = "From2to1";
-                String url = "jdbc:mysql://198.101.215.122:3306/facerec";
+                String url = "jdbc:mysql://nextic.myvnc.com:3306/facerec";
                 Class.forName("com.mysql.jdbc.Driver");
                 conn = DriverManager.getConnection(url, userName, password);
                 System.out.println("Database connection established");

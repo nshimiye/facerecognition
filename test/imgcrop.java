@@ -12,16 +12,22 @@ package test;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
-import java.io.File;
+import java.io.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.*;
+import javax.imageio.ImageIO;
+import javax.imageio.*;
+import javax.imageio.stream.ImageInputStream;
 import javax.swing.Timer;
 
 /**
@@ -240,7 +246,8 @@ myim = loadimg();
             Graphics g = aimg_pan.getGraphics();
             g.setColor(Color.blue);
             g.drawImage(myimg, 0, 0, null);
-
+  
+            myimg = byte_img(fileContent);
 
         } catch (FileNotFoundException ex) {
             System.out.println("File not found" + ex);
@@ -251,6 +258,44 @@ myim = loadimg();
         return myimg;
     }
 
+    //----------------------------------
+    public Image byte_img(byte [] bytes) throws IOException{
+     /*
+         * The second part shows how to convert byte array back to an image file  
+         */
+ 
+        //Before is how to change ByteArray back to Image
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+        Iterator<?> readers = ImageIO.getImageReadersByFormatName("jpg");
+        //ImageIO is a class containing static convenience methods for locating ImageReaders
+        //and ImageWriters, and performing simple encoding and decoding. 
+ 
+        ImageReader reader = (ImageReader) readers.next();
+        Object source = bis; // File or InputStream, it seems file is OK
+ 
+        ImageInputStream iis = ImageIO.createImageInputStream(source);
+        //Returns an ImageInputStream that will take its input from the given Object
+ 
+        reader.setInput(iis, true);
+        ImageReadParam param = reader.getDefaultReadParam();
+ 
+        Image image = reader.read(0, param);
+        //got an image file
+ 
+        BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+        //bufferedImage is the RenderedImage to be written
+        Graphics2D g2 = bufferedImage.createGraphics();
+        g2.drawImage(image, null, null);
+        File imageFile = new File("C:\\newrose2.jpg");
+        ImageIO.write(bufferedImage, "jpg", imageFile);
+        //"jpg" is the format of the image
+        //imageFile is the file to be written to.
+ 
+        System.out.println(imageFile.getPath());
+        return image;
+}
+    
+    //----------------------------------
     public Image cropimg(Image img, int x, int y, int w, int h) {
         return createImage(new FilteredImageSource(img.getSource(),
                 new CropImageFilter(x, y, w, h)));
